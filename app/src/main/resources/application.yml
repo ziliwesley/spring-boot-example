@@ -1,0 +1,19 @@
+# Application Configurations
+
+# Spring Application
+spring:
+  # JPA
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  # Profiles
+  profiles:
+    active: dev
+
+# Web Server (Tomcat)
+server:
+  port: 9097
