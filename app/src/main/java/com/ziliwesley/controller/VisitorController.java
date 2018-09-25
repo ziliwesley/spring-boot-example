@@ -4,6 +4,7 @@ import com.ziliwesley.entity.Visitor;
 import com.ziliwesley.repository.VisitorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,13 @@ public class VisitorController {
     @Autowired
     private VisitorRepository repository;
 
-    @RequestMapping("/")
+    /**
+     * GET /
+     * Index page of the application
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         Visitor visitor = repository.findByIp(ip);
