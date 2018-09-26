@@ -1,10 +1,11 @@
 # Example project using Spring Boot
 
-- Spring Boot
-- docker-compose
-- mysql
-- nginx
-- Redis
+- [x] Spring Boot
+- [ ] docker-compose
+- [x] mysql
+- [ ] nginx
+- [x] Redis
+- [ ] Logback
 
 
 ## References:
