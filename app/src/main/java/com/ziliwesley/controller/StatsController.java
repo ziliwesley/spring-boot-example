@@ -1,8 +1,6 @@
 package com.ziliwesley.controller;
 
-import com.ziliwesley.repository.VisitorRepository;
-import com.ziliwesley.services.StatsSnapshotService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ziliwesley.services.IStatsSnapshotService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +15,7 @@ import java.util.Map;
 public class StatsController {
 
     @Resource(name = "statsSnapshotService")
-    private StatsSnapshotService statsSnapshotService;
+    private IStatsSnapshotService statsSnapshotService;
 
     /**
      * GET /stats/site
