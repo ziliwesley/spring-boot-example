@@ -3,41 +3,46 @@ package com.ziliwesley.services;
 import com.ziliwesley.constant.AppStatsConfig;
 import com.ziliwesley.entity.AppStats;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service("appStatsSnapshotService")
 public class AppStatsSnapshotService implements IAppStatsSnapshotService {
 
     private final String REDIS_KEY = "app_stats";
 
-    public AppStatsSnapshotService(RedisTemplate<String, Long> longRedisTemplate) {
-        this.longRedisTemplate = longRedisTemplate;
-        this.hashOperations = longRedisTemplate.opsForHash();
-    }
-
-    private RedisTemplate<String, Long> longRedisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     HashOperations hashOperations;
+
+    public AppStatsSnapshotService(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+        this.hashOperations = redisTemplate.opsForHash();
+    }
 
     @Override
     public void saveSnapshot(Long count) {
         Long now = System.currentTimeMillis();
 
-        hashOperations.put(REDIS_KEY, "total", count);
-        hashOperations.put(REDIS_KEY, "updated", now);
+        hashOperations.put(REDIS_KEY, "total", String.valueOf(count));
+        hashOperations.put(REDIS_KEY, "updated", String.valueOf(now));
     }
 
     @Override
     public AppStats getSnapshot() {
-        Long total = (Long)hashOperations.get(REDIS_KEY, "total");
-        Long updated = (Long)hashOperations.get(REDIS_KEY, "updated");
+        Map<String, String> hash = hashOperations.entries(REDIS_KEY);
 
-        if (total != null && updated != null) {
+        if (hash.containsKey("total") &&
+            hash.containsKey("updated")) {
+            Long total = Long.valueOf(hash.get("total"));
+            Long updated = Long.valueOf(hash.get("updated"));
+
             return new AppStats(total, updated);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     @Override
