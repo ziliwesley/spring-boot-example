@@ -1,6 +1,5 @@
 package com.ziliwesley.services;
 
-import com.ziliwesley.constant.AppStatsConfig;
 import com.ziliwesley.entity.AppStats;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -50,14 +49,9 @@ public class AppStatsSnapshotService implements IAppStatsSnapshotService {
         AppStats appStats = getSnapshot();
 
         if (appStats != null) {
-            Long timeElapsed = System.currentTimeMillis() - appStats.getUpdated();
-            System.out.println("Elapsed " + timeElapsed);
-            if (timeElapsed > AppStatsConfig.STATS_SNAPSHOT_DURATION) {
-                // Already Expired
-                return null;
-            }
+            return appStats.hasExpired() ? null : appStats;
         }
 
-        return appStats;
+        return null;
     }
 }

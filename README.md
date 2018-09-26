@@ -6,6 +6,7 @@
 - [ ] nginx
 - [x] Redis
 - [ ] Logback
+- [ ] Read Config from configuration files
 
 
 ## References:
