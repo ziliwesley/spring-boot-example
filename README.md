@@ -5,7 +5,7 @@
 - [x] mysql
 - [x] nginx
 - [x] Redis
-- [ ] Logback
+- [x] Logback
 - [ ] Read Config from configuration files (Snapshot durations)
 
 

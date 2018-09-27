@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+  <springProperty name="LOG_FILE" source="logging.file"/>
+  <springProperty name="LOG_PATH" source="logging.path.dir"/>
+  <springProperty name="LOG_ARCHIVE_DIR" source="logging.path.archive"/>
+
+  <springProperty name="CONSOLE_PATTERN" source="logging.pattern.console"/>
+  <springProperty name="FILE_PATTERN" source="logging.pattern.file"/>
+
+  <property name="LOG_ARCHIVE" value="${LOG_PATH}/${LOG_ARCHIVE_DIR}"/>
+
+  <!-- Appenders-->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${CONSOLE_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_PATH}/${LOG_FILE}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_ARCHIVE}/${LOG_FILE}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+      <!-- The optional maxHistory property controls the maximum number of archive files to keep, deleting older files. For example, if you specify monthly rollover, and set maxHistory to 6, then 6 months worth of archives files will be kept with files older than 6 months deleted. Note as old archived log files are removed, any folders which were created for the purpose of log file archiving will be removed as appropriate. -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${FILE_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</configuration>

@@ -1,6 +1,8 @@
 package com.ziliwesley.services;
 
 import com.ziliwesley.entity.AppStats;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import java.util.Map;
 
 @Service("appStatsSnapshotService")
 public class AppStatsSnapshotService implements IAppStatsSnapshotService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final String REDIS_KEY = "app_stats";
 
@@ -49,8 +53,16 @@ public class AppStatsSnapshotService implements IAppStatsSnapshotService {
         AppStats appStats = getSnapshot();
 
         if (appStats != null) {
-            return appStats.hasExpired() ? null : appStats;
+            if (appStats.hasExpired()) {
+                logger.info("Snapshot found, but expired: {}", appStats.getUpdated());
+                return null;
+            } else {
+                logger.info("Snapshot found: {}", appStats.getUpdated());
+                return appStats;
+            }
         }
+
+        logger.debug("Snapshot not found.");
 
         return null;
     }

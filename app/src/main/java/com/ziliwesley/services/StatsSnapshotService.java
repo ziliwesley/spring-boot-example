@@ -43,10 +43,8 @@ public class StatsSnapshotService implements IStatsSnapshotService {
         AppStats appStats = appStatsSnapshotService.getLatestSnapshot();
 
         if (appStats != null) {
-            System.out.println("Found snapshot");
-            return  appStats.getTotal();
+            return appStats.getTotal();
         } else {
-            System.out.println("Snapshot expires");
             return calcSumInDB();
         }
     }

@@ -15,6 +15,13 @@ spring:
     port: 6379
     timeout: 0
 
+# Logging
+logging:
+  path:
+    dir: "/var/log/spring-boot"
+    archive: "archive"
+  file: "stdout"
+
 # Web Server (Tomcat)
 server:
   port: 8080

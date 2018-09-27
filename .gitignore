@@ -5,7 +5,7 @@ app/target
 app/src/main/resources/application-dev.yml
 
 # Log file
-*.log
+logs
 
 # BlueJ files
 *.ctxt

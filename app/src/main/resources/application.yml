@@ -10,11 +10,10 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
   # JPA
   jpa:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: update
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties.hibernate:
+      hbm2ddl:
+        auto: update
+      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
   # Redis Connection
   redis:
     # Db Index
@@ -23,8 +22,21 @@ spring:
     timeout: 0
 
   # Profiles
-  profiles:
-    active: dev
+  profiles.active: dev
+
+# Logging
+logging:
+  path:
+    dir: "logs"
+    archive: "archive"
+  # Filename of logs:
+  # ${loggine.file}.log
+  file: "app"
+  level:
+    org.springframework.web: INFO
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
 
 # Web Server (Tomcat)
 server:
