@@ -1,12 +1,12 @@
 # Example project using Spring Boot
 
 - [x] Spring Boot
-- [ ] docker-compose
+- [x] docker-compose
 - [x] mysql
-- [ ] nginx
+- [x] nginx
 - [x] Redis
 - [ ] Logback
-- [ ] Read Config from configuration files
+- [ ] Read Config from configuration files (Snapshot durations)
 
 
 ## References:

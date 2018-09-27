@@ -1,0 +1,43 @@
+version: '3'
+services:
+  nginx:
+    container_name: spring-boot-nginx
+    image: nginx:1.14
+    restart: always
+    ports:
+      - 9090:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+  mysql:
+    container_name: spring-boot-mysql
+    image: mysql/mysql-server:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: spring_boot
+      MYSQL_ROOT_PASSWORD: 123123
+      MYSQL_ROOT_HOST: '%'
+    expose:
+      - "3306"
+
+  redis:
+    container_name: spring-boot-redis
+    image: redis:3.2.9-alpine
+    restart: always
+    expose:
+      - "6379"
+
+  app:
+    restart: always
+    build: ./app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - ~/.m2:/root/.m2
+    expose:
+      - "8080"
+    depends_on:
+      - nginx
+      - mysql
+      - redis
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
