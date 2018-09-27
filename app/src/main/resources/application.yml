@@ -41,3 +41,10 @@ logging:
 # Web Server (Tomcat)
 server:
   port: 9097
+
+# App specific configs
+app:
+  stats:
+    snapshot:
+      duration: 10000
+      key: "app-stats"

@@ -1,8 +1,10 @@
 package com.ziliwesley.services;
 
+import com.ziliwesley.config.StatsSnapshotConfig;
 import com.ziliwesley.entity.AppStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,10 @@ public class AppStatsSnapshotService implements IAppStatsSnapshotService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final String REDIS_KEY = "app_stats";
-
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private StatsSnapshotConfig statsSnapshotConfig;
 
     HashOperations hashOperations;
 
@@ -25,17 +28,31 @@ public class AppStatsSnapshotService implements IAppStatsSnapshotService {
         this.hashOperations = redisTemplate.opsForHash();
     }
 
+    /**
+     * Return if the statistics is still valid
+     * @return
+     */
+    public boolean hasSnapshotExpired(AppStats appStats) {
+        return System.currentTimeMillis() - appStats.getUpdated()
+            > statsSnapshotConfig.getDuration();
+    }
+
     @Override
     public void saveSnapshot(Long count) {
         Long now = System.currentTimeMillis();
 
-        hashOperations.put(REDIS_KEY, "total", String.valueOf(count));
-        hashOperations.put(REDIS_KEY, "updated", String.valueOf(now));
+        hashOperations.put(
+            statsSnapshotConfig.getKey(),
+            "total", String.valueOf(count));
+        hashOperations.put(
+            statsSnapshotConfig.getKey(),
+            "updated", String.valueOf(now));
     }
 
     @Override
     public AppStats getSnapshot() {
-        Map<String, String> hash = hashOperations.entries(REDIS_KEY);
+        Map<String, String> hash = hashOperations.entries(
+            statsSnapshotConfig.getKey());
 
         if (hash.containsKey("total") &&
             hash.containsKey("updated")) {
@@ -53,7 +70,7 @@ public class AppStatsSnapshotService implements IAppStatsSnapshotService {
         AppStats appStats = getSnapshot();
 
         if (appStats != null) {
-            if (appStats.hasExpired()) {
+            if (hasSnapshotExpired(appStats)) {
                 logger.info("Snapshot found, but expired: {}", appStats.getUpdated());
                 return null;
             } else {

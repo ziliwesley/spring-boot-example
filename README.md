@@ -6,7 +6,7 @@
 - [x] nginx
 - [x] Redis
 - [x] Logback
-- [ ] Read Config from configuration files (Snapshot durations)
+- [x] Read Config from configuration files (Snapshot durations)
 
 
 ## References:
