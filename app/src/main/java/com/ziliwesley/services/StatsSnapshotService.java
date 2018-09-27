@@ -23,6 +23,11 @@ public class StatsSnapshotService implements IStatsSnapshotService {
     private Long calcSumInDB() {
         Long total = repository.countTotalVisits();
 
+        // In case no records found in database
+        if (total == null) {
+            total = 0L;
+        }
+
         // Create a snapshot
         appStatsSnapshotService.saveSnapshot(total);
 
