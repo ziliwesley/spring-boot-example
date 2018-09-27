@@ -17,6 +17,8 @@ services:
       MYSQL_DATABASE: spring_boot
       MYSQL_ROOT_PASSWORD: 123123
       MYSQL_ROOT_HOST: '%'
+    volumes:
+      - ./mysql-data:/var/lib/mysql
     expose:
       - "3306"
 

@@ -7,6 +7,9 @@ app/src/main/resources/application-dev.yml
 # Log file
 logs
 
+# Mysql Data
+mysql-data
+
 # BlueJ files
 *.ctxt
 
